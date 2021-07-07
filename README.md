@@ -1,6 +1,6 @@
 ### Simple Image Preview Thumbnail with Dockerization
 
-This is a small program that uses GDAL functions to create JPEG preview of a Landsat-8 scene. A test scene is provided in the `download` directory.
+This is a small program that uses GDAL functions to create JPEG preview of a Landsat-8 scene. A test scene is provided in the `download` directory. It is containerized using a base OSGEO/GDAL image.
 
 To create the Docker image, do
 
@@ -13,3 +13,5 @@ To run tests do
 To run the code do
 
 ```docker run -it -v $(pwd):/workspace landsat_preview python src/process.py```
+
+A lot of the structure of this code is based on this [repo](https://github.com/eoameen/landsat8_fetch_scene)
