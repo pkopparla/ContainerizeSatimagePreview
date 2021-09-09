@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-yaml
+      - id: detect-aws-credentials
+      - id: trailing-whitespace
+      - id: name-tests-test
+      - id: end-of-file-fixer
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
