@@ -4,14 +4,14 @@ This is a small program that uses GDAL functions to create JPEG preview of a Lan
 
 To create the Docker image, do
 
-```docker build -t satimage_preview .```
+`docker build -t landsat_preview .`
 
 To run tests do
 
-```docker run -it -v $(pwd):/workspace landsat_preview pytest```
+`docker run -it -v $(pwd):/workspace landsat_preview pytest`
 
 To run the code do
 
-```docker run -it -v $(pwd):/workspace landsat_preview python src/process.py```
+`docker run -it -v $(pwd):/workspace landsat_preview python src/process.py`
 
 A lot of the structure of this code is based on this [repo](https://github.com/eoameen/landsat8_fetch_scene)
