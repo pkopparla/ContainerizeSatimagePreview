@@ -1,11 +1,8 @@
 from glob import glob
 import os
 import subprocess
-
-stackcommand = "gdal_merge.py -o rgb.tif -ot Byte -separate -co PHOTOMETRIC=RGB -co COMPRESS=DEFLATE {red} {green} {blue}"
-tcicommand = "gdal_translate -scale 20 80 0 255 -exponent 0.5 -ot Byte -of JPEG -outsize 10% 10% rgb.tif tci.jpg"
-# tcicommand = "gdal_translate -scale 20 0 255 -of JPEG -outsize 10% 10% rgb.tif tci.jpg"
-cleanupcommand = "rm *.tif*"
+from PIL import Image
+import numpy as np
 
 
 def getminmax(tiffile):
@@ -24,7 +21,7 @@ def getminmax(tiffile):
 
 
 def scaleandfill(tiffiles):
-    """function to fill no data and scale values from 0 to 1"""
+    """function to fill no data and scale values from 0 to 255"""
     outfilelist = []
     for tiffile in tiffiles:
         nodatafilename = "nodata" + tiffile[-6:]
@@ -45,6 +42,14 @@ def scaleandfill(tiffiles):
     return outfilelist
 
 
+def getstretchlimits(tiffile):
+    """get the color stretch limits based on a histogram"""
+    with Image.open(tiffile) as im:
+        imarray = np.array(im)
+        imarray = imarray[imarray > 10]  # get rid of the values near zero
+        return [np.percentile(imarray, 1), np.percentile(imarray, 99)]
+
+
 def getpreview(dir="download"):
     """Create a quick JPEG preview for a sample Landsat input"""
     bandfiles = glob(os.path.join(dir, "*B[2-4].TIF"))
@@ -57,9 +62,24 @@ def getpreview(dir="download"):
         green,
         red,
     ) = scaleandfill(bandfiles)
-    # unpack the bands in to the three colors red, blue and green oninllnaegag
-    os.system(stackcommand.format(red=red, green=green, blue=blue))
-    os.system(tcicommand)
+    # unpack the bands in to the three colors red, blue and green
+    stackcommand = (
+        "gdal_merge.py -o rgb.tif -ot Byte -separate -co "
+        "PHOTOMETRIC=RGB -co COMPRESS=DEFLATE {red} {green} {blue}"
+    )
+
+    os.system(
+        stackcommand.format(red=red, green=green, blue=blue)
+    )  # this creates a stacked file 'rgb.tif'
+    stretchmin, stretchmax = getstretchlimits("rgb.tif")
+    tcicommand = (
+        "gdal_translate -scale {stretchmin} {stretchmax} 0 255 "
+        "-exponent 0.5 -ot Byte -of JPEG -outsize 10% 10% rgb.tif tci.jpg"
+    )
+    os.system(
+        tcicommand.format(stretchmin=stretchmin, stretchmax=stretchmax)
+    )  # this color stretches the image and writes to jpeg
+    cleanupcommand = "rm *tif *TIF *xml"
     os.system(cleanupcommand)
     return True
 
