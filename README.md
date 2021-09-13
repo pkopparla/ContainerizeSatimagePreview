@@ -14,4 +14,10 @@ To run the code do
 
 `docker run -it -v $(pwd):/workspace landsat_preview python src/process.py`
 
-A lot of the structure of this code is based on this [repo](https://github.com/eoameen/landsat8_fetch_scene)
+To run the pre-commit linting do
+
+`pre-commit run`
+
+after adding files to be committed. It does some whitespaces checks and black standard linting.
+
+Acknowledgements: Thanks to Ameen Najjar for the idea to try this. I looked to this [repo] as a reference (https://github.com/eoameen/landsat8_fetch_scene)
