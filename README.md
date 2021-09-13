@@ -20,6 +20,10 @@ To run the pre-commit linting do
 
 after adding files to be committed. It does some whitespaces checks and black standard linting.
 
-TBD: Find an easy way to put this onto a Lambda function which is triggered by new scenes uploaded to the Landsat PDS bucket. Currently, the Docker image is quite huge at 1.6 GB.
+TBD:
 
-Acknowledgements: Thanks to Ameen Najjar for the idea to try this. I looked to this [repo](https://github.com/eoameen/landsat8_fetch_scene) as a reference.
+<ol>
+<li> Add a few more unit tests for when commands error out
+<li>Find an easy way to put this onto a Lambda function which is triggered by new scenes uploaded to the Landsat PDS bucket. Currently, the Docker image is quite huge at 1.6 GB. Some demo code for this already exists in this [repo](https://github.com/pkopparla/LandsatThumnails)
+</ol>
+Acknowledgements: Thanks to Dr. Ameen Najjar for the idea to try this. I looked to this [repo](https://github.com/eoameen/landsat8_fetch_scene) as a reference.
