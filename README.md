@@ -22,4 +22,4 @@ after adding files to be committed. It does some whitespaces checks and black st
 
 TBD: Find an easy way to put this onto a Lambda function which is triggered by new scenes uploaded to the Landsat PDS bucket. Currently, the Docker image is quite huge at 1.6 GB.
 
-Acknowledgements: Thanks to Ameen Najjar for the idea to try this. I looked to this [repo] as a reference (https://github.com/eoameen/landsat8_fetch_scene)
+Acknowledgements: Thanks to Ameen Najjar for the idea to try this. I looked to this [repo](https://github.com/eoameen/landsat8_fetch_scene) as a reference.
