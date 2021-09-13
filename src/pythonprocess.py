@@ -3,16 +3,13 @@ import subprocess
 import os
 from PIL import Image
 import numpy as np
+from osgeo import gdal
 
 
 def getminmax(tiffile):
     """function to min and max values of the raster using gdalinfo"""
-    f = (
-        subprocess.check_output("gdalinfo -stats {0}".format(tiffile), shell=True)
-        .decode("utf-8")
-        .split("\n")
-    )
-    for strings in f:
+    info = gdal.Info(tiffile).split("\n")
+    for strings in info:
         if strings.find("STATISTICS_MINIMUM") >= 0:
             min = strings.split("=")[-1]
         if strings.find("STATISTICS_MAXIMUM") >= 0:
@@ -24,18 +21,16 @@ def scaleandfill(tiffiles):
     """function to fill no data and scale values from 0 to 255"""
     outfilelist = []
     for tiffile in tiffiles:
-        # nodatafilename = "nodata" + tiffile[-6:]
         scaledfilename = "scaled" + tiffile[-6:]
-
-        # nodatacommand = "gdal_fillnodata.py {infile} {outfile}"
-        # os.system(nodatacommand.format(infile=tiffile, outfile=nodatafilename))
-        min, max = getminmax(tiffile)  # getminmax(nodatafilename)
-        scalingcommand = "gdal_translate -ot Byte -scale {min} {max} 0 255 \
-        -outsize 959 976 -r cubic {infile} {outfile}"
-        subprocess.call(
-            scalingcommand.format(
-                min=min, max=max, infile=tiffile, outfile=scaledfilename
-            )
+        min, max = getminmax(tiffile)
+        gdal.Translate(
+            scaledfilename,
+            tiffile,
+            width=959,
+            height=976,
+            outputType=gdal.gdalconst.GDT_Byte,
+            resampleAlg="cubic",
+            scaleParams=[[min, max, 0, 255]],
         )
         outfilelist.append(scaledfilename)
     return outfilelist
