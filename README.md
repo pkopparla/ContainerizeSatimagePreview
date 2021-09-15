@@ -20,7 +20,7 @@ To run the pre-commit linting do
 
 after adding files to be committed. It does some whitespaces checks and black standard linting.
 
-Sep 25 2021
+Sep 15 2021
 
 A minimal example is now working with `sam`.
 Try
