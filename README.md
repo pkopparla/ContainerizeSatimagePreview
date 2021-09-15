@@ -20,11 +20,19 @@ To run the pre-commit linting do
 
 after adding files to be committed. It does some whitespaces checks and black standard linting.
 
+Sep 25 2021
+
+A minimal example is now working with `sam`.
+Try
+`sam build` followed by `sam local invoke`
+It will create an image preview for the local files stored under the download folder and upload to
+an S3 bucket named `testpushkarbucket`. More notes to follow.
+
 TBD:
 
 ---
 
 - Add a few more unit tests for when commands error out
-- Find an easy way to put this onto a Lambda function which is triggered by new scenes uploaded to the Landsat PDS bucket. Currently, the Docker image is quite huge at 1.6 GB. Some demo code for this already exists in this [repo](https://github.com/pkopparla/LandsatThumnails)
+- Find an easy way to put this onto a Lambda function which is triggered by new scenes uploaded to the Landsat PDS bucket. Currently, the Docker image is quite huge at 1.6 GB. Some demo code for this already exists in this [repo](https://github.com/pkopparla/LandsatThumnails).
 
 Acknowledgements: Thanks to Dr. Ameen Najjar for the idea to try this. I looked to this [repo](https://github.com/eoameen/landsat8_fetch_scene) as a reference.
