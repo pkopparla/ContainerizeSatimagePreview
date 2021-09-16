@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:us-west-2:673253540267:public-c2-notify:520d4264-b58b-4a83-bb97-9260e5685f43",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "2788c92e-dd51-5708-ba31-9093bd112282",
+        "TopicArn": "arn:aws:sns:us-west-2:673253540267:public-c2-notify",
+        "Subject": "New C2 Product Added",
+        "Message": "{\"landsat_product_id\": \"LE07_L2SP_115067_20210721_20210916_02_T2\", \"s3_location\": \"s3://usgs-landsat/collection02/level-2/standard/etm/2021/115/067/LE07_L2SP_115067_20210721_20210916_02_T2/\"}",
+        "Timestamp": "2021-09-16T15:08:48.718Z",
+        "SignatureVersion": "1",
+        "Signature": "qg/AELKtd2xLi8FpA15u0DcGqL7A1CZNEShT8ExzHtLe7wObrZOzU/fFpCKUKN3GFhDgNgnF/4Z4nrQds4SY+yAbU4jYtVoccjG0N9kDwuEEZKSOUVgliJ1B3eVemvKLkY5M1R5VRevKH25euma+HKmXezFua4KC0tFTkRchzN+WN0Oohz/WlyIG5niDl9fJIw7w2A6vguCzwcza9CPbuIdv7vXaRskw2T8Ushzm09EdBhesUC6bsEUYmfeaAINU6cM1NJePo0WwA14gEPn8HkTD2Q1Ev9d+xgjghMl+beVUvFl9E+1W8LeEKbdaw16nT7bGmIQpTG9ZuTHYcqkvRw==",
+        "SigningCertUrl": "https://sns.us-west-2.amazonaws.com/SimpleNotificationService-010a507c1833636cd94bdb98bd93083a.pem",
+        "UnsubscribeUrl": "https://sns.us-west-2.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-west-2:673253540267:public-c2-notify:520d4264-b58b-4a83-bb97-9260e5685f43",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}

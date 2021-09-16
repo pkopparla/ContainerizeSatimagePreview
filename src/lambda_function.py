@@ -3,36 +3,23 @@ from src import process
 import json
 
 
-def getkey(messagetext, band):
-    objectpath = messagetext["Records"][0]["s3"]["object"]["key"]
-    frags = objectpath.split("/")
-    suffix = "_" + band + ".TIF"
-    filename = frags[-2] + suffix
-    filepath = "/".join(frags[:-1])
-    filepath = filepath + "/" + filename
-    return filepath
-
-
-def getbucketname(messagetext):
-    bucketname = messagetext["Records"][0]["s3"]["bucket"]["name"]
-    return bucketname
+def makefilelist(inpstring):
+    """function to get RGB bands file locations given an S3 scene location"""
+    frags = list(filter(len, inpstring.split("/")))
+    frags[0] = "/vsis3"
+    outfilelist = []
+    for band in ["B4", "B3", "B2"]:
+        copy = list(frags)
+        copy.append(frags[-1] + "_" + band + ".TIF")
+        outfilelist.append("/".join(copy))
+    return outfilelist
 
 
 def lambda_handler(event, context):
-    # rgbbands = ['B4','B3','B2'] #red,green,blue
-    # filelist = []
-    # for band in rgbbands:
-    #     key = getkey(event,band)
-    #     resourceloc = '/vsicurl/https://landsat-pds.s3.amazonaws.com/'+key
-    #     filelist.append(resourceloc)
-    # print(filelist)
-    filelist = [
-        "download/LC08_L2SP_044034_20201129_20201211_02_T1_SR_B4.TIF",
-        "download/LC08_L2SP_044034_20201129_20201211_02_T1_SR_B3.TIF",
-        "download/LC08_L2SP_044034_20201129_20201211_02_T1_SR_B2.TIF",
-    ]
-    process.getpreview(filelist)
-    return True
+
+    jsontext = json.loads(event["Records"][0]["Sns"]["Message"])
+    bandfiles = makefilelist(jsontext["s3_location"])
+    return bandfiles
 
 
 # if __name__=="__main__":
