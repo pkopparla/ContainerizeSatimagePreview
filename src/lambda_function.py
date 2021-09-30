@@ -1,6 +1,10 @@
-# import boto3
-from src import process
 import json
+
+# terrible trouble with imports, what works locally doesn't work on Docker
+try:
+    import src.process as process
+except ImportError:
+    import process
 
 
 def makefilelist(inpstring):
@@ -8,7 +12,7 @@ def makefilelist(inpstring):
     frags = list(filter(len, inpstring.split("/")))
     frags[0] = "/vsis3"
     outfilelist = []
-    for band in ["B4", "B3", "B2"]:
+    for band in ["SR_B4", "SR_B3", "SR_B2"]:
         copy = list(frags)
         copy.append(frags[-1] + "_" + band + ".TIF")
         outfilelist.append("/".join(copy))
@@ -16,11 +20,11 @@ def makefilelist(inpstring):
 
 
 def lambda_handler(event, context):
-
     jsontext = json.loads(event["Records"][0]["Sns"]["Message"])
     bandfiles = makefilelist(jsontext["s3_location"])
-    return bandfiles
+    outfilename = process.getpreview(bandfiles)
+    return outfilename
 
 
-# if __name__=="__main__":
-#    lambda_handler('a','b')
+if __name__ == "__main__":
+    print(lambda_handler(json.loads(open("newmessage.json", "r").read()), None))
