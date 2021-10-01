@@ -38,10 +38,8 @@ TBD:
 
 ---
 
-- Add a few more unit tests for when commands error out
 - Tried uploading image to ECR and creating a Lambda function with it. GDAL CLI commands throw errors, even
   though they work fine with `sam local invoke`. Needs debugging, maybe refactor to GDAL python bindings?
-- Figure out how to securely pass AWS credentials to access requester pays bucket without passing
-  secret keys in plaintext.
+- Figure out how to securely pass AWS credentials (needed to access requester pays bucket + preview jpeg upload to s3) without passing secret keys in plaintext.
 
 Acknowledgements: Thanks to Dr. Ameen Najjar for the idea to try this.

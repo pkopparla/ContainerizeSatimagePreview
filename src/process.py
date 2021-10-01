@@ -3,6 +3,7 @@ import numpy as np
 import boto3
 import time
 from osgeo import gdal
+import os
 
 '''
 def getminmax(tiffile):
@@ -26,6 +27,8 @@ def scaleandfill(tiffiles):
     """function to fill no data and scale values from 0 to 255"""
     bandstrings = ["B4.TIF", "B3.TIF", "B2.TIF"]
     outfilelist = []
+    if len(tiffiles) != 3 or type(tiffiles) is not list:
+        raise ValueError("Input 3 RGB band file names in a list")
     for count, tiffile in enumerate(tiffiles):
         scaledfilename = "scaled" + bandstrings[count]
         scalingcommand = "CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif gdal_translate \
@@ -58,6 +61,11 @@ def getstretchlimits(tiffile):
 def getpreview(bandfiles):
     """Create a quick JPEG preview for a sample Landsat input"""
     blue, green, red = scaleandfill(bandfiles)
+    for each in [blue, green, red]:
+        if not os.path.isfile(each):
+            raise FileNotFoundError(
+                "Remote files do not exist or could not be accessed"
+            )
     # unpack the bands in to the three colors red, blue and green
     stackcommand = "gdal_merge.py -o rgb.tif -separate -co \
     PHOTOMETRIC=RGB -co COMPRESS=DEFLATE {red} {green} {blue} \
@@ -66,16 +74,23 @@ def getpreview(bandfiles):
     subprocess.call(
         stackcommand.format(red=red, green=green, blue=blue), shell=True
     )  # this creates a stacked file 'rgb.tif'
+
+    if not os.path.isfile("rgb.tif"):
+        raise FileNotFoundError("Band stacking has failed")
+
     stretchmin, stretchmax = getstretchlimits("rgb.tif")
     tcicommand = "gdal_translate -scale {stretchmin} {stretchmax} 0 255 \
     -exponent 1 -ot Byte -of JPEG rgb.tif tci.jpg"
     subprocess.call(
         tcicommand.format(stretchmin=stretchmin, stretchmax=stretchmax), shell=True
     )  # this color stretches the image and writes to jpeg
+
     cleanupcommand = "rm *tif *TIF *xml"
     subprocess.call(cleanupcommand, shell=True)
+
     timestring = time.strftime("%H_%M_%S", time.localtime())
     s3filename = "tcilatest" + timestring + ".jpg"
     s3 = boto3.client("s3")
     s3.upload_file("tci.jpg", "testpushkarbucket", s3filename)
+
     return s3filename
