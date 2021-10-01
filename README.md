@@ -32,7 +32,9 @@ Try `sam build` followed by `sam local invoke -e newmessage.json`
 This simulates a landsat bucket event for a new scene, which triggers the pipeline and uploads
 to the preview image an S3 bucket named `testpushkarbucket` tagged with current time. Because this is not a public
 access bucket you will need to change this to your own bucket.
-More notes to follow.
+
+To hook it up to the official Landsat bucket, you will need to set the Lambda trigger to an SNS topic with the ARN `arn:aws:sns:us-west-2:673253540267:public-c2-notify`
+More notes on that are [here](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-commercial-cloud-data-access?qt-science_support_page_related_con=1#qt-science_support_page_related_con).
 
 TBD:
 
