@@ -31,9 +31,9 @@ def scaleandfill(tiffiles):
         raise ValueError("Input 3 RGB band file names in a list")
     for count, tiffile in enumerate(tiffiles):
         scaledfilename = "scaled" + bandstrings[count]
-        scalingcommand = "CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif gdal_translate \
-        -outsize 959 976 -r cubic {infile} {outfile} --config \
-        AWS_REQUEST_PAYER requester"
+        scalingcommand = "CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif \
+        gdal_translate -outsize 959 976 -r cubic {infile} {outfile} \
+        --config AWS_REQUEST_PAYER requester"
         subprocess.call(
             scalingcommand.format(infile=tiffile, outfile=scaledfilename),
             shell=True,
